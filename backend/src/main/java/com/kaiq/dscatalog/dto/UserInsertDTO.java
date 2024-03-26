@@ -1,5 +1,8 @@
 package com.kaiq.dscatalog.dto;
 
+import com.kaiq.dscatalog.services.validation.UserInsertValid;
+
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {
 
     private String password;
