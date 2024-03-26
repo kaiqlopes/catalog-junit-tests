@@ -1,7 +1,8 @@
 package com.kaiq.dscatalog.dto;
 
-import com.kaiq.dscatalog.entities.Role;
 import com.kaiq.dscatalog.entities.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,8 +10,12 @@ import java.util.Set;
 public class UserDTO {
 
     private Long id;
+
+    @NotBlank(message = "Obligatory field")
     private String firstName;
     private String lastName;
+
+    @Email(message = "Must be a valid email")
     private String email;
 
     private Set<RoleDTO> roles = new HashSet<>();
