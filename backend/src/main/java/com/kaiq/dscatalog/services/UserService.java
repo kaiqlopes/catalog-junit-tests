@@ -1,9 +1,6 @@
 package com.kaiq.dscatalog.services;
 
-import com.kaiq.dscatalog.dto.CategoryDTO;
-import com.kaiq.dscatalog.dto.RoleDTO;
-import com.kaiq.dscatalog.dto.UserDTO;
-import com.kaiq.dscatalog.dto.UserInsertDTO;
+import com.kaiq.dscatalog.dto.*;
 import com.kaiq.dscatalog.entities.Category;
 import com.kaiq.dscatalog.entities.Role;
 import com.kaiq.dscatalog.entities.User;
@@ -59,7 +56,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(Long id, UserUpdateDTO dto) {
 		try {
 			User entity = repository.getReferenceById(id);
 			copyDtoToEntity(dto, entity);
