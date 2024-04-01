@@ -3,6 +3,7 @@ package com.kaiq.dscatalog.resources;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kaiq.dscatalog.dto.ProductDTO;
 import com.kaiq.dscatalog.factories.ProductFactory;
+import com.kaiq.dscatalog.token.TokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,17 @@ public class ProductResourceIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
     private Long existingId;
     private Long nonExistingId;
     private Long countTotalProducts;
     private ProductDTO productDTO;
+
+    private String username;
+    private String password;
+    private String bearerToken;
 
     @BeforeEach
     void SetUp() throws Exception {
@@ -39,6 +47,10 @@ public class ProductResourceIT {
         nonExistingId = 1000L;
         countTotalProducts = 25L;
         productDTO = ProductFactory.createProductDTO();
+
+        username = "maria@gmail.com";
+        password = "123456";
+        bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
     }
 
     @Test
@@ -61,9 +73,10 @@ public class ProductResourceIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         mockMvc.perform(put("/products/{id}", existingId)
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .header("Authorization", "Bearer " + bearerToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(existingId))
@@ -76,9 +89,10 @@ public class ProductResourceIT {
         String jsonBody = objectMapper.writeValueAsString(productDTO);
 
         mockMvc.perform(put("/products/{id}", nonExistingId)
-                .content(jsonBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .header("Authorization", "Bearer " + bearerToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNotFound());
     }
